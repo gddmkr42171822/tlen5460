@@ -1,0 +1,171 @@
+ME3#sh run
+Building configuration...
+
+Current configuration : 2566 bytes
+!
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname ME3
+!
+!
+no aaa new-model
+switch 1 provision ws-c3750-48ts
+ip subnet-zero
+!
+!
+!
+!
+!
+!
+no file verify auto
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+interface FastEthernet1/0/1
+ switchport access vlan 24
+ switchport mode dot1q-tunnel
+ l2protocol-tunnel cdp
+ l2protocol-tunnel stp
+ l2protocol-tunnel vtp
+ no cdp enable
+!
+interface FastEthernet1/0/2
+ switchport access vlan 24
+ switchport mode dot1q-tunnel
+ l2protocol-tunnel cdp
+ l2protocol-tunnel stp
+ l2protocol-tunnel vtp
+ no cdp enable
+!
+interface FastEthernet1/0/3
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 24
+ switchport mode trunk
+!
+interface FastEthernet1/0/4
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 24
+ switchport mode trunk
+!
+interface FastEthernet1/0/5
+!
+interface FastEthernet1/0/6
+!
+interface FastEthernet1/0/7
+!
+interface FastEthernet1/0/8
+!
+interface FastEthernet1/0/9
+!
+interface FastEthernet1/0/10
+!
+interface FastEthernet1/0/11
+!
+interface FastEthernet1/0/12
+!
+interface FastEthernet1/0/13
+!
+interface FastEthernet1/0/14
+!
+interface FastEthernet1/0/15
+!
+interface FastEthernet1/0/16
+!
+interface FastEthernet1/0/17
+!
+interface FastEthernet1/0/18
+!
+interface FastEthernet1/0/19
+!
+interface FastEthernet1/0/20
+!
+interface FastEthernet1/0/21
+!
+interface FastEthernet1/0/22
+!
+interface FastEthernet1/0/23
+!
+interface FastEthernet1/0/24
+!
+interface FastEthernet1/0/25
+!
+interface FastEthernet1/0/26
+!
+interface FastEthernet1/0/27
+!
+interface FastEthernet1/0/28
+!
+interface FastEthernet1/0/29
+!
+interface FastEthernet1/0/30
+!
+interface FastEthernet1/0/31
+!
+interface FastEthernet1/0/32
+!
+interface FastEthernet1/0/33
+!
+interface FastEthernet1/0/34
+!
+interface FastEthernet1/0/35
+!
+interface FastEthernet1/0/36
+!
+interface FastEthernet1/0/37
+!
+interface FastEthernet1/0/38
+!
+interface FastEthernet1/0/39
+!
+interface FastEthernet1/0/40
+!
+interface FastEthernet1/0/41
+!
+interface FastEthernet1/0/42
+!
+interface FastEthernet1/0/43
+!
+interface FastEthernet1/0/44
+!
+interface FastEthernet1/0/45
+!
+interface FastEthernet1/0/46
+!
+interface FastEthernet1/0/47
+!
+interface FastEthernet1/0/48
+!
+interface GigabitEthernet1/0/1
+!
+interface GigabitEthernet1/0/2
+!
+interface GigabitEthernet1/0/3
+!
+interface GigabitEthernet1/0/4
+!
+interface Vlan1
+ no ip address
+!
+ip classless
+ip http server
+ip http secure-server
+!
+!
+!
+control-plane
+!
+!
+line con 0
+line vty 5 15
+!
+!
+end
+
+ME3#

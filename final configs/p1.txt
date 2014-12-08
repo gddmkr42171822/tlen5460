@@ -1,0 +1,153 @@
+P1#sh run
+Building configuration...
+
+Current configuration : 1826 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname P1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+resource policy
+!
+no network-clock-participate slot 2
+!
+!
+ip cef
+!
+!
+ip name-server 8.8.8.8
+!
+voice-card 0
+ no dspfarm
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ ip address dhcp
+ ip nat outside
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+ negotiation auto
+!
+interface Serial1/0
+ no ip address
+ shutdown
+ no fair-queue
+ serial restart-delay 0
+ no dce-terminal-timing-enable
+!
+interface Serial1/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+ no dce-terminal-timing-enable
+!
+interface Serial1/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+ no dce-terminal-timing-enable
+!
+interface Serial1/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+ no dce-terminal-timing-enable
+!
+interface FastEthernet2/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet2/0.74
+ encapsulation dot1Q 74
+ ip address 60.4.1.4 255.255.255.248
+ ip nat inside
+ ip virtual-reassembly
+ no snmp trap link-status
+!
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/0
+ip route 192.168.14.0 255.255.255.252 60.4.1.1
+ip route 192.168.14.4 255.255.255.252 60.4.1.2
+ip route 192.168.14.8 255.255.255.252 60.4.1.3
+!
+!
+ip http server
+no ip http secure-server
+ip nat inside source list 1 interface GigabitEthernet0/0 overload
+!
+access-list 1 permit any
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ login
+!
+scheduler allocate 20000 1000
+!
+webvpn context Default_context
+ ssl authenticate verify all
+ !
+ no inservice
+!
+!
+end
+
+P1#

@@ -1,0 +1,242 @@
+PE1#sh run
+Building configuration...
+
+Current configuration : 4280 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname PE1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+resource policy
+!
+no network-clock-participate slot 1
+no network-clock-participate slot 2
+!
+!
+ip cef
+!
+!
+!
+ipv6 unicast-routing
+no mpls ip
+mpls traffic-eng tunnels
+mpls traffic-eng reoptimize timers frequency 100
+voice-card 0
+ no dspfarm
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel1
+ description mpls tunnel 1
+ ip unnumbered Loopback1
+ tunnel destination 60.4.2.3
+ tunnel mode mpls traffic-eng
+ tunnel mpls traffic-eng autoroute announce
+ tunnel mpls traffic-eng priority 7 7
+ tunnel mpls traffic-eng bandwidth  200
+ tunnel mpls traffic-eng path-option 1 explicit name PE1-PE2-PE3
+ tunnel mpls traffic-eng path-option 2 dynamic
+ tunnel mpls traffic-eng record-route
+ no routing dynamic
+!
+interface Tunnel3
+ description mpls tunnel 3
+ ip unnumbered Loopback1
+ tunnel destination 60.4.2.2
+ tunnel mode mpls traffic-eng
+ tunnel mpls traffic-eng autoroute announce
+ tunnel mpls traffic-eng priority 7 7
+ tunnel mpls traffic-eng bandwidth  200
+ tunnel mpls traffic-eng path-option 1 explicit name PE1-PE3-PE2
+ tunnel mpls traffic-eng path-option 2 dynamic
+ tunnel mpls traffic-eng record-route
+ no routing dynamic
+!
+interface Tunnel4
+ description manual ipv4 to CE1
+ ip address 192.168.20.2 255.255.255.0
+ tunnel source GigabitEthernet0/0
+ tunnel destination 2664:44:4:1::1
+ tunnel mode ipv6
+!
+interface Tunnel7
+ description mpls tunnel 7
+ ip unnumbered Loopback1
+ shutdown
+ tunnel destination 60.4.2.3
+ tunnel mode mpls traffic-eng
+ tunnel mpls traffic-eng autoroute announce
+ tunnel mpls traffic-eng priority 6 6
+ tunnel mpls traffic-eng bandwidth  200
+ tunnel mpls traffic-eng path-option 1 explicit name PE1-PE2-PE3
+ tunnel mpls traffic-eng record-route
+ no routing dynamic
+!
+interface Tunnel8
+ description 6t4 tunnel between PEs
+ no ip address
+ no ip redirects
+ ipv6 address 2002:3C04:101:1::1/64
+ tunnel source FastEthernet2/0.74
+ tunnel mode ipv6ip 6to4
+!
+interface Loopback1
+ ip address 60.4.2.1 255.255.255.255
+!
+interface GigabitEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ media-type rj45
+ negotiation auto
+ ipv6 address 2664:44:4:1::2/64
+ ipv6 ospf 10 area 0
+!
+interface GigabitEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+ negotiation auto
+!
+interface FastEthernet1/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet1/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet2/0
+ no ip address
+ duplex auto
+ speed auto
+ ip rsvp bandwidth 800
+!
+interface FastEthernet2/0.74
+ encapsulation dot1Q 74
+ ip address 60.4.1.1 255.255.255.248
+ no snmp trap link-status
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth 400
+!
+interface FastEthernet2/0.75
+ encapsulation dot1Q 75
+ ip address 60.4.3.1 255.255.255.248
+ no snmp trap link-status
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth 400
+!
+interface FastEthernet2/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+router ospf 80
+ mpls traffic-eng router-id Loopback1
+ mpls traffic-eng area 0
+ log-adjacency-changes
+ network 60.4.1.0 0.0.0.7 area 0
+ network 60.4.2.1 0.0.0.0 area 0
+ network 60.4.3.0 0.0.0.7 area 0
+!
+ip route 0.0.0.0 0.0.0.0 60.4.1.4
+ip route 60.4.2.2 255.255.255.255 60.4.1.2
+ip route 60.4.2.2 255.255.255.255 60.4.1.3
+ip route 60.4.2.3 255.255.255.255 60.4.1.3
+ip route 60.4.2.3 255.255.255.255 60.4.1.2
+ip route 192.168.14.0 255.255.255.252 192.168.20.1
+!
+!
+ip http server
+no ip http secure-server
+!
+ip explicit-path name PE1-PE2-PE3 enable
+ next-address 60.4.1.1
+ next-address 60.4.1.2
+ next-address 60.4.3.2
+ next-address 60.4.3.3
+!
+ip explicit-path name PE1-PE3-PE2 enable
+ next-address 60.4.3.1
+ next-address 60.4.3.3
+ next-address 60.4.1.3
+ next-address 60.4.1.2
+!
+!
+!
+ipv6 route 2002::/16 Tunnel8
+ipv6 route 2664:44:4:2::/64 2002:3C04:102:1::1
+ipv6 route 2664:44:4:3::/64 2002:3C04:103:1::1
+ipv6 router ospf 10
+ router-id 1.1.1.1
+ log-adjacency-changes
+ redistribute static
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ stopbits 1
+line aux 0
+line vty 0 4
+ login
+!
+scheduler allocate 20000 1000
+!
+webvpn context Default_context
+ ssl authenticate verify all
+ !
+ no inservice
+!
+!
+end
+
+PE1#

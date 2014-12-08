@@ -1,0 +1,265 @@
+tarth#      sh run
+Building configuration...
+
+Current configuration : 5266 bytes
+!
+version 12.1
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname tarth
+!
+!
+ip subnet-zero
+ip routing
+!
+!
+!
+spanning-tree mode pvst
+no spanning-tree optimize bpdu transmission
+spanning-tree extend system-id
+spanning-tree vlan 3 priority 24576
+!
+!
+interface Port-channel2
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 5
+ switchport mode trunk
+ bandwidth 150000
+!
+interface Port-channel3
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic desirable
+ bandwidth 550000
+ spanning-tree vlan 2 cost 1
+!
+interface Port-channel4
+ no switchport
+ bandwidth 250000
+ ip address 192.168.21.33 255.255.255.252
+!
+interface FastEthernet1/0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree vlan 9 cost 1
+!
+interface FastEthernet1/0/2
+!
+interface FastEthernet1/0/3
+!
+interface FastEthernet1/0/4
+ no switchport
+ ip address 192.168.21.5 255.255.255.252
+!
+interface FastEthernet1/0/5
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 5
+ switchport mode trunk
+ channel-group 2 mode desirable
+!
+interface FastEthernet1/0/6
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 5
+ switchport mode trunk
+ channel-group 2 mode desirable
+!
+interface FastEthernet1/0/7
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree vlan 7 cost 1
+!
+interface FastEthernet1/0/8
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic desirable
+ spanning-tree vlan 7 cost 2
+!
+interface FastEthernet1/0/9
+ switchport trunk encapsulation dot1q
+ spanning-tree vlan 7 cost 3
+!
+interface FastEthernet1/0/10
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic desirable
+ channel-group 3 mode passive
+!
+interface FastEthernet1/0/11
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic desirable
+ channel-group 3 mode passive
+!
+interface FastEthernet1/0/12
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic desirable
+ channel-group 3 mode passive
+!
+interface FastEthernet1/0/13
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic desirable
+ channel-group 3 mode passive
+!
+interface FastEthernet1/0/14
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic desirable
+ channel-group 3 mode passive
+!
+interface FastEthernet1/0/15
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic desirable
+ channel-group 3 mode passive
+!
+interface FastEthernet1/0/16
+!
+interface FastEthernet1/0/17
+ no switchport
+ ip address 192.168.21.2 255.255.255.252
+!
+interface FastEthernet1/0/18
+ no switchport
+ ip address 192.168.21.26 255.255.255.252
+!
+interface FastEthernet1/0/19
+ no switchport
+ no ip address
+ channel-group 4 mode desirable
+!
+interface FastEthernet1/0/20
+ no switchport
+ no ip address
+ channel-group 4 mode desirable
+!
+interface FastEthernet1/0/21
+ no switchport
+ no ip address
+ channel-group 4 mode desirable
+!
+interface FastEthernet1/0/22
+!
+interface FastEthernet1/0/23
+!
+interface FastEthernet1/0/24
+!
+interface FastEthernet1/0/25
+!
+interface FastEthernet1/0/26
+!
+interface FastEthernet1/0/27
+!
+interface FastEthernet1/0/28
+!
+interface FastEthernet1/0/29
+!
+interface FastEthernet1/0/30
+!
+interface FastEthernet1/0/31
+!
+interface FastEthernet1/0/32
+!
+interface FastEthernet1/0/33
+!
+interface FastEthernet1/0/34
+!
+interface FastEthernet1/0/35
+!
+interface FastEthernet1/0/36
+!
+interface FastEthernet1/0/37
+!
+interface FastEthernet1/0/38
+!
+interface FastEthernet1/0/39
+!
+interface FastEthernet1/0/40
+!
+interface FastEthernet1/0/41
+!
+interface FastEthernet1/0/42
+!
+interface FastEthernet1/0/43
+!
+interface FastEthernet1/0/44
+!
+interface FastEthernet1/0/45
+!
+interface FastEthernet1/0/46
+!
+interface FastEthernet1/0/47
+!
+interface FastEthernet1/0/48
+!
+interface GigabitEthernet1/0/1
+!
+interface GigabitEthernet1/0/2
+!
+interface GigabitEthernet1/0/3
+!
+interface GigabitEthernet1/0/4
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan2
+ ip address 172.21.0.5 255.255.224.0
+ ip helper-address 192.168.21.1
+ no ip redirects
+ standby 1 ip 172.21.0.2
+ standby 1 priority 105
+ standby 1 preempt
+ standby 1 track FastEthernet1/0/17
+!
+interface Vlan3
+ ip address 172.21.128.11 255.255.224.0
+ ip helper-address 192.168.21.25
+ no ip redirects
+ standby 1 priority 105
+ standby 2 ip 172.21.128.1
+ standby 2 priority 100
+ standby 2 preempt
+ standby 2 track FastEthernet1/0/17
+!
+interface Vlan4
+ ip address 172.21.32.1 255.255.248.0
+!
+interface Vlan6
+ ip address 172.21.183.12 255.255.255.0
+ no ip redirects
+ standby 6 ip 172.21.183.1
+ standby 6 priority 100
+!
+interface Vlan7
+ ip address 172.21.192.12 255.255.192.0
+ no ip redirects
+ standby 7 ip 172.21.192.2
+ standby 7 priority 100
+!
+interface Vlan9
+ ip address 172.21.180.11 255.255.254.0
+!
+router rip
+ version 2
+ offset-list 6 in 5 Vlan2
+ offset-list 6 in 5 Vlan7
+ offset-list 6 in 2 FastEthernet1/0/17
+ offset-list 3 out 5 FastEthernet1/0/17
+ offset-list 3 out 5 Port-channel4
+ network 172.21.0.0
+ network 192.168.21.0
+ distribute-list 8 in
+ no auto-summary
+!
+ip classless
+ip http server
+!
+access-list 2 permit 172.21.0.0 0.0.31.255
+access-list 3 permit 172.21.128.0 0.0.31.255
+access-list 6 permit 172.21.183.0 0.0.0.255
+access-list 8 deny   172.21.48.0 0.0.15.255
+access-list 8 permit any
+!
+line con 0
+line vty 5 15
+!
+end
+
+tarth#

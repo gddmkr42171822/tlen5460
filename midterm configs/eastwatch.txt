@@ -1,0 +1,119 @@
+eastwatch#sh run
+Building configuration...
+
+Current configuration : 1911 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname eastwatch
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+no network-clock-participate slot 2
+ip cef
+!
+!
+no ip dhcp use vrf connected
+ip dhcp excluded-address 172.21.128.1 172.21.128.10
+!
+ip dhcp pool brienne
+   network 172.21.128.0 255.255.224.0
+   default-router 172.21.128.1
+   dns-server 8.8.8.8
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ ip address dhcp
+ ip nat outside
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface Serial1/0
+ no ip address
+ shutdown
+ no fair-queue
+ serial restart-delay 0
+!
+interface Serial1/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial1/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial1/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface FastEthernet2/0
+ ip address 192.168.21.22 255.255.255.252
+ ip nat inside
+ duplex auto
+ speed auto
+!
+interface FastEthernet2/1
+ ip address 192.168.21.25 255.255.255.252
+ ip nat inside
+ duplex auto
+ speed auto
+!
+router rip
+ version 2
+ offset-list 3 out 5 GigabitEthernet0/0
+ offset-list 6 in 2 FastEthernet2/0
+ offset-list 3 out 5 FastEthernet2/0
+ network 172.31.0.0
+ network 192.168.21.0
+ default-information originate
+ distribute-list 7 in
+ no auto-summary
+!
+ip forward-protocol nd
+!
+ip http server
+ip nat inside source list 4 interface GigabitEthernet0/0 overload
+!
+access-list 2 permit 172.21.0.0 0.0.31.255
+access-list 3 permit 172.21.128.0 0.0.31.255
+access-list 4 permit any
+access-list 7 deny   172.21.192.0 0.0.63.255
+access-list 7 deny   172.21.180.0 0.0.1.255
+access-list 7 deny   172.21.48.0 0.0.15.255
+access-list 7 permit any
+!
+control-plane
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+!
+scheduler allocate 20000 1000
+!
+end
+
+eastwatch#

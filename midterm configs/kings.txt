@@ -1,0 +1,167 @@
+
+kings#sh run
+Building configuration...
+
+Current configuration : 2871 bytes
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname kings
+!
+boot-start-marker
+boot-end-marker
+!
+!
+username bob password 0 midterm
+!
+!
+no aaa new-model
+system mtu routing 1500
+ip routing
+ip domain-name westeros
+!
+!
+!
+!
+!
+!
+!
+!
+errdisable recovery cause psecure-violation
+errdisable recovery interval 45
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+spanning-tree vlan 7 priority 24576
+!
+vlan internal allocation policy ascending
+!
+ip ssh version 2
+!
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ bandwidth 300000
+ spanning-tree vlan 9 cost 1
+!
+interface FastEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 2-5
+ switchport mode trunk
+ spanning-tree vlan 2-3 cost 1
+!
+interface FastEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 6-9
+ switchport mode trunk
+!
+interface FastEthernet0/3
+ switchport access vlan 6
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address 685b.35c0.fabe vlan access
+!
+interface FastEthernet0/4
+ no switchport
+ ip address 192.168.21.10 255.255.255.252
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic desirable
+ spanning-tree vlan 7 cost 3
+!
+interface FastEthernet0/8
+ switchport trunk encapsulation dot1q
+ spanning-tree vlan 7 cost 2
+!
+interface FastEthernet0/9
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree vlan 7 cost 1
+!
+interface FastEthernet0/10
+ no switchport
+ ip address 192.168.21.13 255.255.255.252
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode desirable
+!
+interface FastEthernet0/23
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode desirable
+!
+interface FastEthernet0/24
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode desirable
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+!
+router rip
+ version 2
+ network 192.168.21.0
+ distribute-list 8 in
+ no auto-summary
+!
+ip classless
+ip http server
+ip http secure-server
+!
+ip sla enable reaction-alerts
+access-list 8 deny   172.21.48.0 0.0.15.255
+access-list 8 permit any
+!
+!
+line con 0
+ login local
+line vty 0 3
+ login local
+ transport input ssh
+line vty 4
+ no login
+ transport input ssh
+line vty 5 15
+ login
+!
+end
+
+kings#

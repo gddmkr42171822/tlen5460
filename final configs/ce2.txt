@@ -1,0 +1,204 @@
+CE2#sh run
+Building configuration...
+
+Current configuration : 2975 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname CE2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+resource policy
+!
+no network-clock-participate slot 2
+!
+!
+ip cef
+!
+!
+!
+ipv6 unicast-routing
+voice-card 0
+ no dspfarm
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel3
+ description manual ipv4 to CE1
+ ip address 172.16.2.2 255.255.255.0
+ tunnel source GigabitEthernet0/0
+ tunnel destination 2664:44:4:1::1
+ tunnel mode ipv6
+!
+interface Tunnel4
+ description manual ipv4 to CE3
+ ip address 172.16.3.2 255.255.255.0
+ tunnel source GigabitEthernet0/0
+ tunnel destination 2664:44:4:3::1
+ tunnel mode ipv6
+!
+interface Tunnel5
+ description ipv6 isatap to CE1
+ no ip address
+ no ip redirects
+ ipv6 address 2664:44:4:10::/64 eui-64
+ no ipv6 nd ra suppress
+ ipv6 ospf network non-broadcast
+ ipv6 ospf priority 5
+ ipv6 ospf neighbor FE80::5EFE:AC10:201
+ ipv6 ospf 65 area 1
+ tunnel source Tunnel3
+ tunnel mode ipv6ip isatap
+!
+interface Tunnel6
+ description ipv6 isatap to CE3
+ no ip address
+ no ip redirects
+ ipv6 address 2664:44:4:11::/64 eui-64
+ no ipv6 nd ra suppress
+ ipv6 ospf network non-broadcast
+ ipv6 ospf priority 5
+ ipv6 ospf neighbor FE80::5EFE:AC10:303
+ ipv6 ospf 65 area 0
+ tunnel source Tunnel4
+ tunnel mode ipv6ip isatap
+!
+interface Tunnel7
+ description manual ipv4 to PE2
+ ip address 192.168.21.1 255.255.255.0
+ tunnel source GigabitEthernet0/0
+ tunnel destination 2664:44:4:2::2
+ tunnel mode ipv6
+!
+interface GigabitEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ media-type rj45
+ negotiation auto
+ ipv6 address 2664:44:4:2::1/64
+ ipv6 rip itplab enable
+!
+interface GigabitEthernet0/1
+ ip address 192.168.14.5 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+ negotiation auto
+!
+interface Serial1/0
+ no ip address
+ shutdown
+ no fair-queue
+ serial restart-delay 0
+ no dce-terminal-timing-enable
+!
+interface Serial1/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+ no dce-terminal-timing-enable
+!
+interface Serial1/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+ no dce-terminal-timing-enable
+!
+interface Serial1/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+ no dce-terminal-timing-enable
+!
+interface FastEthernet2/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet2/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+ip route 0.0.0.0 0.0.0.0 192.168.21.2
+ip route 172.16.2.0 255.255.255.0 Tunnel3
+ip route 172.16.3.0 255.255.255.0 Tunnel4
+ip route 192.168.14.0 255.255.255.252 Tunnel3
+ip route 192.168.14.8 255.255.255.252 Tunnel4
+!
+!
+ip http server
+no ip http secure-server
+!
+!
+!
+ipv6 router ospf 65
+ router-id 22.22.22.22
+ log-adjacency-changes
+!
+ipv6 router rip itplab
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ login
+!
+scheduler allocate 20000 1000
+!
+webvpn context Default_context
+ ssl authenticate verify all
+ !
+ no inservice
+!
+!
+end
+
+CE2#

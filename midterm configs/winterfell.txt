@@ -1,0 +1,205 @@
+winterfell#sh run
+Building configuration...
+
+Current configuration : 3458 bytes
+!
+version 12.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname winterfell
+!
+boot-start-marker
+boot-end-marker
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+no aaa new-model
+ip subnet-zero
+!
+!
+ip cef
+ip dhcp excluded-address 172.21.64.1 172.21.64.10
+!
+ip dhcp pool dannerys
+   network 172.21.64.0 255.255.192.0
+   default-router 172.21.64.1
+   dns-server 8.8.8.8
+!
+!
+ip ips po max-events 100
+no ftp-server write-enable
+!
+!
+!
+spanning-tree vlan 2 priority 8192
+!
+!
+!
+bridge irb
+!
+!
+interface Dot11Radio0
+ no ip address
+ !
+ encryption vlan 2 key 2 size 128bit 0 12345678901234567890123456 transmit-key
+ encryption vlan 2 mode ciphers tkip wep128
+ !
+ ssid 1b_joffrey
+    vlan 7
+    authentication open
+    guest-mode
+ !
+ ssid 1b_stark
+    vlan 2
+    max-associations 2
+    authentication open
+    authentication key-management wpa optional
+    wpa-psk ascii 0 batman01
+ !
+ speed basic-1.0 basic-2.0 basic-5.5 6.0 9.0 basic-11.0 12.0 18.0 24.0 36.0 48.0 54.0
+ channel 2427
+!
+interface Dot11Radio0.2
+ encapsulation dot1Q 2
+ no cdp enable
+ bridge-group 2
+ bridge-group 2 subscriber-loop-control
+ bridge-group 2 spanning-disabled
+ bridge-group 2 block-unknown-source
+ no bridge-group 2 source-learning
+ no bridge-group 2 unicast-flooding
+!
+interface Dot11Radio0.7
+ encapsulation dot1Q 7
+ no cdp enable
+ bridge-group 7
+ bridge-group 7 subscriber-loop-control
+ bridge-group 7 spanning-disabled
+ bridge-group 7 block-unknown-source
+ no bridge-group 7 source-learning
+ no bridge-group 7 unicast-flooding
+!
+interface Dot11Radio1
+ no ip address
+ shutdown
+ speed basic-6.0 9.0 basic-12.0 18.0 basic-24.0 36.0 48.0 54.0
+ station-role root
+!
+interface FastEthernet0
+ ip address 192.168.21.6 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet1
+ ip address 192.168.21.9 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet2
+ switchport mode trunk
+ no ip address
+ spanning-tree vlan 3 cost 1
+!
+interface FastEthernet3
+ switchport mode trunk
+ no ip address
+ spanning-tree vlan 2 cost 1
+!
+interface FastEthernet4
+ switchport mode trunk
+ no ip address
+ spanning-tree vlan 2 cost 1
+!
+interface FastEthernet5
+ switchport mode trunk
+ no ip address
+ spanning-tree vlan 7 cost 1
+ spanning-tree vlan 9 cost 1
+!
+interface FastEthernet6
+ no ip address
+ shutdown
+!
+interface FastEthernet7
+ no ip address
+ shutdown
+!
+interface FastEthernet8
+ no ip address
+ shutdown
+!
+interface FastEthernet9
+ switchport access vlan 2
+ no ip address
+ shutdown
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan2
+ no ip address
+ bridge-group 2
+!
+interface Vlan5
+ ip address 172.21.64.1 255.255.192.0
+!
+interface Vlan7
+ no ip address
+ bridge-group 7
+!
+interface Async1
+ no ip address
+!
+interface BVI2
+ ip address 172.21.0.1 255.255.224.0
+!
+interface BVI7
+ ip address 172.21.192.1 255.255.192.0
+!
+router rip
+ version 2
+ offset-list 3 in 2 BVI2
+ offset-list 3 in 2 BVI7
+ offset-list 3 in 2 FastEthernet0
+ network 172.21.0.0
+ network 192.168.21.0
+ distribute-list 8 in
+ no auto-summary
+!
+ip classless
+!
+!
+no ip http server
+no ip http secure-server
+!
+access-list 2 permit 172.21.0.0 0.0.31.255
+access-list 8 deny   172.21.48.0 0.0.15.255
+access-list 8 permit any
+!
+!
+!
+!
+control-plane
+!
+bridge 2 protocol ieee
+bridge 2 route ip
+bridge 7 protocol ieee
+bridge 7 route ip
+!
+line con 0
+line 1
+ stopbits 1
+ speed 115200
+ flowcontrol hardware
+line aux 0
+line vty 0 4
+ login
+!
+end
+
+winterfell#

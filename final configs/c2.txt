@@ -1,0 +1,163 @@
+C2#sh run
+Building configuration...
+
+Current configuration : 2269 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname C2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+resource policy
+!
+no network-clock-participate slot 1
+no network-clock-participate slot 2
+!
+!
+ip cef
+!
+!
+ip name-server 8.8.8.8
+!
+voice-card 0
+ no dspfarm
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel11
+ description ipv4 gre to C3
+ ip address 192.168.16.2 255.255.255.0
+ tunnel source GigabitEthernet0/1
+ tunnel destination 192.168.14.10
+!
+interface Tunnel12
+ description ipv4 gre to C1
+ ip address 192.168.17.2 255.255.255.0
+ tunnel source GigabitEthernet0/1
+ tunnel destination 192.168.14.2
+!
+interface Loopback1
+ no ip address
+!
+interface Loopback2
+ ip address 172.16.0.1 255.255.252.0
+!
+interface GigabitEthernet0/0
+ ip address 172.16.4.1 255.255.255.128
+ ip nat inside
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ ip address 192.168.14.6 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+ media-type rj45
+ negotiation auto
+!
+interface FastEthernet1/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet1/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet2/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+router ospf 45
+ log-adjacency-changes
+ network 172.16.0.0 0.0.3.255 area 1
+ network 172.16.4.0 0.0.0.127 area 1
+ network 192.168.16.0 0.0.0.255 area 1
+ network 192.168.17.0 0.0.0.255 area 0
+!
+ip route 0.0.0.0 0.0.0.0 192.168.14.5
+ip route 172.24.0.0 255.255.224.0 192.168.17.1
+ip route 172.30.0.0 255.255.128.0 192.168.16.1
+ip route 192.168.14.0 255.255.255.252 192.168.14.5
+ip route 192.168.14.8 255.255.255.252 192.168.14.5
+ip route 192.168.16.0 255.255.255.0 Tunnel11
+ip route 192.168.17.0 255.255.255.0 Tunnel12
+!
+!
+ip http server
+no ip http secure-server
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+!
+access-list 1 permit 172.16.4.0 0.0.0.127
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ stopbits 1
+line aux 0
+line vty 0 4
+ login
+!
+scheduler allocate 20000 1000
+!
+webvpn context Default_context
+ ssl authenticate verify all
+ !
+ no inservice
+!
+!
+end
+
+C2#
